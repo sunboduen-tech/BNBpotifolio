@@ -8,7 +8,18 @@ import { links } from "@/config";
 
 export const Hero = () => {
   return (
-    <div className="pb-20 pt-36">
+    <div className="relative pb-20 pt-36">
+      {/* Background image — opacity only, no content changes */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('/skills-bg.jpeg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.08,
+        }}
+      />
       <div>
         <Spotlight
           className="-left-10 -top-40 h-screen md:-left-32 md:-top-20"

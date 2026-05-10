@@ -150,6 +150,18 @@ export function Skills() {
       className="relative w-full py-24 overflow-hidden"
       style={{ fontFamily: "'Inter', 'Poppins', sans-serif" }}
     >
+      {/* Background image with opacity only */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          backgroundImage: "url('/skills-bg.jpeg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.07,
+        }}
+      />
+
       {/* Ambient blobs */}
       <div
         className="pointer-events-none absolute -top-40 left-1/4 h-96 w-96 rounded-full opacity-10 blur-2xl"

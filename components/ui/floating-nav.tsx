@@ -7,8 +7,7 @@ import {
   useMotionValueEvent,
 } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -29,8 +28,14 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
   const { scrollY } = useScroll();
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [modalOpen, setModalOpen] = useState(false);
+
+  // Company image modal
+  const [companyModalOpen, setCompanyModalOpen] = useState(false);
   const [modalItem, setModalItem] = useState<NavItem | null>(null);
+
+  // Waiting prompt modal
+  const [promptOpen, setPromptOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
 
   useMotionValueEvent(scrollY, "change", (current) => {
     if (typeof current === "number") {
@@ -43,9 +48,21 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
     }
   });
 
-  const openModal = (item: NavItem) => {
-    setModalItem(item);
-    setModalOpen(true);
+  // Show waiting prompt, then run action on Continue
+  const withPrompt = useCallback((action: () => void) => {
+    setPendingAction(() => action);
+    setPromptOpen(true);
+  }, []);
+
+  const handleContinue = () => {
+    setPromptOpen(false);
+    pendingAction?.();
+    setPendingAction(null);
+  };
+
+  const handleCancel = () => {
+    setPromptOpen(false);
+    setPendingAction(null);
   };
 
   return (
@@ -62,10 +79,15 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
         >
           {navItems.map((navItem, idx) =>
             navItem.modal ? (
-              /* Company nav item — click opens modal */
+              /* Company nav item */
               <button
                 key={`link-${idx}`}
-                onClick={() => openModal(navItem)}
+                onClick={() =>
+                  withPrompt(() => {
+                    setModalItem(navItem);
+                    setCompanyModalOpen(true);
+                  })
+                }
                 className="flex items-center gap-1.5 cursor-pointer group"
               >
                 {navItem.logo && (
@@ -90,25 +112,159 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
               </button>
             ) : (
               /* Regular nav item */
-              <Link
+              <button
                 key={`link-${idx}`}
-                href={navItem.link}
-                target={navItem.external ? "_blank" : undefined}
-                rel={navItem.external ? "noopener noreferrer" : undefined}
+                onClick={() =>
+                  withPrompt(() => {
+                    if (navItem.external) {
+                      window.open(navItem.link, "_blank", "noopener,noreferrer");
+                    } else {
+                      const el = document.querySelector(navItem.link);
+                      el?.scrollIntoView({ behavior: "smooth" });
+                    }
+                  })
+                }
                 className={cn(
-                  "relative flex items-center space-x-1 text-neutral-600 hover:text-neutral-500 dark:text-neutral-50 dark:hover:text-neutral-300"
+                  "relative flex items-center space-x-1 text-neutral-600 hover:text-neutral-500 dark:text-neutral-50 dark:hover:text-neutral-300 cursor-pointer"
                 )}
               >
                 <span className="!cursor-pointer text-sm">{navItem.name}</span>
-              </Link>
+              </button>
             )
           )}
         </motion.nav>
       </AnimatePresence>
 
-      {/* ── Full-screen company image modal ── */}
+      {/* ── Waiting Prompt Modal ── */}
       <AnimatePresence>
-        {modalOpen && modalItem?.logo && (
+        {promptOpen && (
+          <motion.div
+            key="prompt-modal"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Backdrop */}
+            <div
+              className="absolute inset-0"
+              style={{ background: "rgba(0,0,0,0.75)", backdropFilter: "blur(10px)" }}
+            />
+
+            {/* Card */}
+            <motion.div
+              className="relative z-10 w-full"
+              style={{ maxWidth: 420 }}
+              initial={{ scale: 0.88, opacity: 0, y: 24 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.88, opacity: 0, y: 24 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {/* Glow */}
+              <div
+                className="absolute -inset-1 rounded-3xl blur-xl opacity-30"
+                style={{ background: "linear-gradient(135deg, #7c3aed, #06b6d4)" }}
+              />
+
+              <div
+                className="relative rounded-3xl p-7 flex flex-col items-center text-center gap-5"
+                style={{
+                  background: "rgba(10,10,30,0.97)",
+                  border: "1px solid rgba(124,58,237,0.45)",
+                  boxShadow: "0 24px 80px rgba(0,0,0,0.7), 0 0 50px rgba(124,58,237,0.15)",
+                }}
+              >
+                {/* Animated pulse icon */}
+                <div className="relative flex items-center justify-center">
+                  <motion.div
+                    className="absolute w-16 h-16 rounded-full"
+                    style={{ background: "rgba(124,58,237,0.15)" }}
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
+                    transition={{ duration: 1.8, repeat: Infinity }}
+                  />
+                  <div
+                    className="relative w-14 h-14 rounded-full flex items-center justify-center text-2xl"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(124,58,237,0.3), rgba(6,182,212,0.2))",
+                      border: "1px solid rgba(124,58,237,0.5)",
+                    }}
+                  >
+                    ⏳
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div className="space-y-2">
+                  <h3 className="text-lg font-bold text-white">Please Wait</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#94a3b8" }}>
+                    Waiting... if you don&apos;t want to wait, call
+                  </p>
+                  <a
+                    href="tel:0732972867"
+                    className="inline-flex items-center gap-2 text-base font-bold transition-all hover:scale-105"
+                    style={{ color: "#a78bfa" }}
+                  >
+                    📞 Niyonkuru Allay Sun Boduen
+                    <span
+                      className="px-3 py-1 rounded-full text-sm font-mono"
+                      style={{
+                        background: "rgba(124,58,237,0.15)",
+                        border: "1px solid rgba(124,58,237,0.4)",
+                        color: "#c4b5fd",
+                      }}
+                    >
+                      0732972867
+                    </span>
+                  </a>
+                </div>
+
+                {/* Animated loading dots */}
+                <div className="flex gap-1.5">
+                  {[0, 1, 2].map((i) => (
+                    <motion.div
+                      key={i}
+                      className="w-2 h-2 rounded-full"
+                      style={{ background: "#7c3aed" }}
+                      animate={{ scale: [1, 1.6, 1], opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.2 }}
+                    />
+                  ))}
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-3 w-full">
+                  <button
+                    onClick={handleCancel}
+                    className="flex-1 py-2.5 rounded-full text-sm font-semibold transition-all hover:scale-105"
+                    style={{
+                      background: "rgba(255,255,255,0.05)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                      color: "#94a3b8",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleContinue}
+                    className="flex-1 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:scale-105"
+                    style={{
+                      background: "linear-gradient(135deg, #7c3aed, #06b6d4)",
+                      boxShadow: "0 4px 20px rgba(124,58,237,0.4)",
+                    }}
+                  >
+                    Continue →
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Company image modal ── */}
+      <AnimatePresence>
+        {companyModalOpen && modalItem?.logo && (
           <motion.div
             key="company-modal"
             className="fixed inset-0 z-[9998] flex items-center justify-center p-4"
@@ -116,15 +272,12 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            onClick={() => setModalOpen(false)}
+            onClick={() => setCompanyModalOpen(false)}
           >
-            {/* Backdrop */}
             <div
               className="absolute inset-0"
               style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(12px)" }}
             />
-
-            {/* Modal card */}
             <motion.div
               className="relative z-10 flex flex-col items-center"
               initial={{ scale: 0.85, opacity: 0, y: 30 }}
@@ -134,13 +287,10 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
               onClick={(e) => e.stopPropagation()}
               style={{ maxWidth: 560, width: "100%" }}
             >
-              {/* Glow ring */}
               <div
                 className="absolute -inset-1 rounded-3xl blur-xl opacity-40"
                 style={{ background: "linear-gradient(135deg, #7c3aed, #06b6d4)" }}
               />
-
-              {/* Card */}
               <div
                 className="relative rounded-3xl overflow-hidden w-full"
                 style={{
@@ -149,7 +299,6 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
                   background: "rgba(10,10,30,0.95)",
                 }}
               >
-                {/* Company image — full size */}
                 <div className="relative w-full" style={{ height: 380 }}>
                   <Image
                     src={modalItem.logo}
@@ -159,8 +308,6 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
                     priority
                   />
                 </div>
-
-                {/* Footer bar */}
                 <div
                   className="flex items-center justify-between px-6 py-4"
                   style={{ borderTop: "1px solid rgba(124,58,237,0.2)" }}
@@ -172,7 +319,7 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
                     </p>
                   </div>
                   <button
-                    onClick={() => setModalOpen(false)}
+                    onClick={() => setCompanyModalOpen(false)}
                     className="flex items-center justify-center w-9 h-9 rounded-full text-white transition-all hover:scale-110"
                     style={{
                       background: "rgba(124,58,237,0.2)",
@@ -183,8 +330,6 @@ export const FloatingNav = ({ navItems, className }: FloatingNavProps) => {
                   </button>
                 </div>
               </div>
-
-              {/* Click outside hint */}
               <p className="mt-4 text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
                 Click outside to close
               </p>

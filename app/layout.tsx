@@ -4,6 +4,7 @@ import type { PropsWithChildren } from "react";
 
 import { siteConfig } from "@/config";
 import { ChatWidget } from "@/components/chat-widget";
+import { AppWrapper } from "@/components/app-wrapper";
 
 import { ThemeProvider } from "./provider";
 
@@ -39,7 +40,9 @@ const RootLayout = ({ children }: Readonly<PropsWithChildren>) => {
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
-          {children}
+          <AppWrapper>
+            {children}
+          </AppWrapper>
           {/* Floating static chat widget — pure frontend, no backend */}
           <ChatWidget />
         </ThemeProvider>

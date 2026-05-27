@@ -6,9 +6,9 @@ export const navItems = [
   { name: "CV", link: "#cv" },
   { name: "Contact", link: "#contact" },
   {
-    name: "NBGroup",
-    link: "https://github.com/sunboduen-tech",
-    external: true,
+    name: "Company",
+    link: "#",
+    modal: true,
     logo: "/nbgroup-logo.jpg",
   },
 ] as const;

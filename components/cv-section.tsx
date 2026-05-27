@@ -339,8 +339,8 @@ export function CVSection() {
           transition={{ delay: 0.5, duration: 0.6 }}
         >
           <motion.a
-            href="/boduen-cv.pdf"
-            download
+            href="/niyonkuru_ally_cv.pdf"
+            download="Niyonkuru_Ally_CV.pdf"
             whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(99,102,241,0.5)" }}
             whileTap={{ scale: 0.97 }}
             className="flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold text-white"

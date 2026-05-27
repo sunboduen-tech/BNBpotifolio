@@ -121,8 +121,8 @@ export const Hero = () => {
 
               {/* Download CV */}
               <motion.a
-                href="/boduen-cv.pdf"
-                download
+                href="/niyonkuru_ally_cv.pdf"
+                download="Niyonkuru_Ally_CV.pdf"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
                 className="flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all"
@@ -230,10 +230,6 @@ export const Hero = () => {
                   height={280}
                   className="object-cover w-full h-full"
                   priority
-                  onError={(e) => {
-                    // Fallback to avatar if profile image not found
-                    (e.target as HTMLImageElement).src = "/profile-avatar.jpg";
-                  }}
                 />
               </div>
             </div>

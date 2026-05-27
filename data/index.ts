@@ -5,6 +5,12 @@ export const navItems = [
   { name: "Projects", link: "#projects" },
   { name: "CV", link: "#cv" },
   { name: "Contact", link: "#contact" },
+  {
+    name: "NBGroup",
+    link: "https://github.com/sunboduen-tech",
+    external: true,
+    logo: "/nbgroup-logo.jpg",
+  },
 ] as const;
 
 export const gridItems = [
@@ -220,7 +226,7 @@ export const socialMedia = [
   {
     name: "GitHub",
     img: "/git.svg",
-    link: "https://github.com/sanidhyy",
+    link: "https://github.com/sunboduen-tech",
   },
   {
     name: "Twitter",

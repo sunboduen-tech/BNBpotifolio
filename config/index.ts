@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
 export const links = {
-  sourceCode: "https://github.com/sanidhyy/next-portfolio",
+  sourceCode: "https://github.com/sunboduen-tech",
   ownerName: "Niyonkuru Allay Sun Boduen",
+  ownerTitle: "CEO of NBGroup",
   ownerEmail: "sunboduen@gmail.com",
   ownerPhone: "0792652471",
   ownerWhatsApp: "0732972867",
   ownerWhatsAppLink: "https://wa.me/250732972867",
+  github: "https://github.com/sunboduen-tech",
+  nbgroup: "https://github.com/sunboduen-tech",
 } as const;
 
 export const siteConfig: Metadata = {

@@ -79,9 +79,25 @@ export const Hero = () => {
 
             {/* Animated title */}
             <TextGenerateEffect
-              className="text-xl sm:text-2xl lg:text-3xl font-bold mb-4"
+              className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1"
               words="Full-Stack Developer & AI Systems Engineer"
             />
+
+            {/* CEO badge */}
+            <motion.p
+              className="text-sm font-semibold mb-4"
+              style={{
+                background: "linear-gradient(135deg, #a78bfa, #7c3aed)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.55, duration: 0.6 }}
+            >
+              🏢 {links.ownerTitle}
+            </motion.p>
 
             {/* Description */}
             <motion.p

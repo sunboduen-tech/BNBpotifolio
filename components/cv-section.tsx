@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { FaDownload, FaEye } from "react-icons/fa";
 import {
   FaReact, FaNodeJs, FaMobileAlt, FaDatabase, FaBrain,
   FaGraduationCap, FaTrophy, FaBriefcase, FaCode,
@@ -330,14 +331,32 @@ export function CVSection() {
           </GlassCard>
         </div>
 
-        {/* ── Download CV CTA ── */}
+        {/* ── CTA buttons: View + Download ── */}
         <motion.div
-          className="mt-10 flex justify-center"
+          className="mt-10 flex flex-wrap justify-center gap-4"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
+          {/* View CV */}
+          <motion.a
+            href="/niyonkuru_ally_cv.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(6,182,212,0.5)" }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold text-white"
+            style={{
+              background: "linear-gradient(135deg, #0891b2, #06b6d4)",
+              boxShadow: "0 4px 30px rgba(6,182,212,0.35)",
+              fontFamily: "'Inter', 'Poppins', sans-serif",
+            }}
+          >
+            <FaEye /> View CV
+          </motion.a>
+
+          {/* Download CV */}
           <motion.a
             href="/niyonkuru_ally_cv.pdf"
             download="Niyonkuru_Ally_CV.pdf"
@@ -350,7 +369,7 @@ export function CVSection() {
               fontFamily: "'Inter', 'Poppins', sans-serif",
             }}
           >
-            📄 Download Full CV (PDF)
+            <FaDownload /> Download Full CV (PDF)
           </motion.a>
         </motion.div>
       </div>

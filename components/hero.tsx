@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FaWhatsapp, FaDownload, FaArrowRight } from "react-icons/fa";
+import { FaWhatsapp, FaDownload, FaArrowRight, FaEye } from "react-icons/fa";
 
 import { Spotlight } from "@/components/ui/spotlight";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
@@ -118,6 +118,23 @@ export const Hero = () => {
                   Hire Me <FaArrowRight className="text-xs" />
                 </motion.button>
               </Link>
+
+              {/* View CV */}
+              <motion.a
+                href="/niyonkuru_ally_cv.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(6,182,212,0.4)" }}
+                whileTap={{ scale: 0.97 }}
+                className="flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition-all"
+                style={{
+                  background: "linear-gradient(135deg, #0891b2, #06b6d4)",
+                  boxShadow: "0 4px 20px rgba(6,182,212,0.25)",
+                  fontFamily: "'Inter', 'Poppins', sans-serif",
+                }}
+              >
+                <FaEye className="text-xs" /> View CV
+              </motion.a>
 
               {/* Download CV */}
               <motion.a

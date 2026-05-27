@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import type { PropsWithChildren } from "react";
 
 import { siteConfig } from "@/config";
+import { ChatWidget } from "@/components/chat-widget";
 
 import { ThemeProvider } from "./provider";
 
@@ -39,6 +40,8 @@ const RootLayout = ({ children }: Readonly<PropsWithChildren>) => {
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" forcedTheme="dark">
           {children}
+          {/* Floating static chat widget — pure frontend, no backend */}
+          <ChatWidget />
         </ThemeProvider>
       </body>
     </html>

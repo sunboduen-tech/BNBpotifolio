@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 export const links = {
   sourceCode: "https://github.com/sanidhyy/next-portfolio",
   ownerName: "Niyonkuru Allay Sun Boduen",
-  ownerEmail: "sanidhya.verma12345@gmail.com",
+  ownerEmail: "sunboduen@gmail.com",
+  ownerPhone: "0792652471",
+  ownerWhatsApp: "0732972867",
+  ownerWhatsAppLink: "https://wa.me/250732972867",
 } as const;
 
 export const siteConfig: Metadata = {

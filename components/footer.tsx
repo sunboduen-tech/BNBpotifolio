@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FaLocationArrow } from "react-icons/fa6";
+import { FaWhatsapp, FaLocationArrow } from "react-icons/fa6";
 
 import { MagicButton } from "@/components/ui/magic-button";
 import { links } from "@/config";
@@ -8,7 +8,7 @@ import { socialMedia } from "@/data";
 
 export const Footer = () => {
   return (
-    <footer id="contact" className="mb-[100px] w-full pb-10 md:mb-auto">
+    <footer className="mb-[100px] w-full pb-10 md:mb-auto">
       <div className="absolute -bottom-72 left-0 min-h-96 w-full">
         <Image
           src="/footer-grid.svg"
@@ -27,15 +27,15 @@ export const Footer = () => {
         </h1>
 
         <p className="my-5 text-center text-white-200 md:mt-10">
-          Reach out to me today and let&apos;s discuss how I can help your
-          achieve your goals.
+          Reach out today and let&apos;s build something amazing together.
         </p>
 
+        {/* Email CTA */}
         <Link
           href={`mailto:${links.ownerEmail}`}
           target="_blank"
           rel="noreferrer noopener"
-          className="md:mt-10"
+          className="md:mt-6"
         >
           <MagicButton
             title="Let's get in touch"
@@ -44,26 +44,35 @@ export const Footer = () => {
             asChild
           />
         </Link>
+
+        {/* WhatsApp CTA */}
+        <Link
+          href={links.ownerWhatsAppLink}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="mt-4"
+        >
+          <button
+            className="flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-105"
+            style={{
+              background: "linear-gradient(135deg, #25d366, #128c7e)",
+              boxShadow: "0 4px 20px rgba(37,211,102,0.3)",
+            }}
+          >
+            <FaWhatsapp className="text-base" />
+            WhatsApp: {links.ownerWhatsApp}
+          </button>
+        </Link>
       </div>
 
       <div className="relative z-[999] mt-16 flex flex-col items-center justify-between md:flex-row">
         <p className="text-sm font-light md:text-base md:font-normal">
           Copyright &copy; {new Date().getFullYear()}{" "}
-          <Link
-            href="https://sanidhy.me"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-purple"
-          >
-            Sanidhya
-          </Link>{" "}
-          |{" "}
-          <Link href={links.sourceCode} className="underline">
-            Source Code
-          </Link>
+          <span className="text-purple">{links.ownerName}</span>
+          {" "}· {links.ownerEmail}
         </p>
 
-        <div className="flex items-center gap-6 md:gap-3">
+        <div className="flex items-center gap-6 md:gap-3 mt-4 md:mt-0">
           {socialMedia.map((profile) => (
             <Link
               key={profile.name}

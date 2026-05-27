@@ -8,6 +8,8 @@ import { Grid } from "@/components/grid";
 import { Hero } from "@/components/hero";
 import { FloatingNav } from "@/components/ui/floating-nav";
 import { RecentProjects } from "@/components/recent-projects";
+import { CVSection } from "@/components/cv-section";
+import { Contact } from "@/components/contact";
 import { navItems } from "@/data";
 
 const MainPage = () => {
@@ -16,14 +18,37 @@ const MainPage = () => {
       <FloatingNav navItems={navItems} />
 
       <div className="w-full max-w-7xl">
+        {/* Hero — profile image, animated intro, Hire Me, Download CV, WhatsApp */}
         <Hero />
+
+        {/* About — bento grid */}
         <Grid />
+
+        {/* Projects — 5 project cards */}
         <RecentProjects />
+
+        {/* Clients / testimonials */}
         <Clients />
+
+        {/* Work experience */}
         <Experience />
+
+        {/* Services */}
         <Services />
+
+        {/* Skills bars */}
         <Skills />
+
+        {/* Professional CV — skills, experience, education, achievements */}
+        <CVSection />
+
+        {/* Approach */}
         <Approach />
+
+        {/* Contact — phone, WhatsApp, email */}
+        <Contact />
+
+        {/* Footer */}
         <Footer />
       </div>
     </main>
